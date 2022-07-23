@@ -23,6 +23,7 @@
       }
     ],
     "new-parens": ["error"],
+    "no-extra-boolean-cast": "off",
     "no-unneeded-ternary": ["error"],
     "no-whitespace-before-property": ["error"],
     "operator-assignment": ["error", "always"],
