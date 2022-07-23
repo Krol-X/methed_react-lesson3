@@ -5,10 +5,17 @@ import style from './ClassComponent.module.css';
 const getRandomInt = (a, b) =>
   Math.floor(Math.random() * (b + 1 - a) + a);
 
+const numBeetwen = (x, min, max) =>
+  x >= min && x <= max;
+
 export class ClassComponent extends React.Component {
+  defaultInfo = `Введите число от ${this.props.min} до ${this.props.max}`;
+
   state = {
+    min: this.props.min,
+    max: this.props.max,
     userNumber: '',
-    info: `Введите число`,
+    info: this.defaultInfo,
     randomNumber:
       getRandomInt(this.props.min, this.props.max),
     isGuess: false,
@@ -16,13 +23,13 @@ export class ClassComponent extends React.Component {
   };
 
   resetRandom = () => {
-    this.setState({
-      info: `Введите число`,
+    this.setState(state => ({
+      info: this.defaultInfo,
       randomNumber:
-        getRandomInt(this.props.min, this.props.max),
+        getRandomInt(state.min, state.max),
       isGuess: false,
       tryCount: 0
-    });
+    }));
   };
 
   handleSubmit = (e) => {
@@ -32,14 +39,14 @@ export class ClassComponent extends React.Component {
     if (this.state.isGuess) {
       this.resetRandom();
     } else {
-      this.setState((state) => {
+      this.setState(state => {
         const newState = {
-          tryCount: state.tryCount + 1,
-          info: `Введите число`,
+          info: this.defaultInfo,
           userNumber: ''
         };
 
-        if (!!userNumber) {
+        if (numBeetwen(userNumber, state.min, state.max)) {
+          newState.tryCount = state.tryCount + 1;
           if (userNumber > state.randomNumber) {
             newState.info = `${userNumber} больше заданного`;
           } else
@@ -51,16 +58,15 @@ export class ClassComponent extends React.Component {
             newState.isGuess = true;
           }
         }
-        console.log(newState.tryCount);
         return newState;
       });
     }
   };
 
   handleChange = (e) => {
-    this.setState({
+    this.setState(state => ({
       userNumber: e.target.value
-    });
+    }));
   };
 
   render() {
